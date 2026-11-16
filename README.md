@@ -1,1 +1,0 @@
-# industrial-maintenance-ai
