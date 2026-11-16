@@ -1,70 +1,25 @@
-# AI-Based Industrial Maintenance and Process Optimization System
+# tinyglobby
 
-Full-stack predictive-maintenance starter project:
-- React + Vite dashboard
-- FastAPI REST API
-- Random Forest failure prediction using the AI4I 2020 dataset
-- SQLite storage for prediction history
-- Optional OpenAI-powered explanation (API key is optional)
+[![npm version](https://img.shields.io/npm/v/tinyglobby.svg?maxAge=3600)](https://npmjs.com/package/tinyglobby)
+[![weekly downloads](https://img.shields.io/npm/dw/tinyglobby.svg?maxAge=3600)](https://npmjs.com/package/tinyglobby)
 
-## Requirements
-- Python 3.10+
-- Node.js 18+
-- Internet connection for the first dataset download and package installation
+A fast and minimal alternative to globby and fast-glob, meant to behave the same way.
 
-## 1. Backend setup (Windows PowerShell)
-```powershell
-cd backend
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-Copy-Item .env.example .env
-python scripts\download_dataset.py
-python scripts\train_model.py
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-```
-API docs: http://127.0.0.1:8000/docs
+Both globby and fast-glob present some behavior no other globbing lib has,
+which makes it hard to manually replace with something smaller and better.
 
-If PowerShell blocks activation, run:
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
+This library uses only two subdependencies, compared to `globby`'s [23](https://npmgraph.js.org/?q=globby@16.2.0)
+and `fast-glob`'s [17](https://npmgraph.js.org/?q=fast-glob@3.3.3).
+
+## Usage
+
+```js
+import { glob, globSync } from 'tinyglobby';
+
+await glob(['files/*.ts', '!**/*.d.ts'], { cwd: 'src' });
+globSync('src/**/*.ts', { ignore: '**/*.d.ts' });
 ```
 
-## 2. Frontend setup (new terminal)
-```powershell
-cd frontend
-npm install
-Copy-Item .env.example .env
-npm run dev
-```
-Open the local URL printed by Vite (normally http://localhost:5173).
+## Documentation
 
-## 3. Dataset
-The downloader retrieves the public AI4I 2020 Predictive Maintenance Dataset from the UCI Machine Learning Repository and saves it as `backend/data/ai4i2020.csv`.
-Do not rename the target column `Machine failure`. The training script uses the process and sensor features and excludes identifiers/target leakage columns.
-
-## 4. API endpoints
-- `GET /health` - service and model status
-- `GET /metrics` - model evaluation metrics
-- `GET /machines` - sample machine records
-- `POST /predict` - predict failure risk for a machine
-- `GET /history` - recent saved predictions
-
-Example request:
-```json
-{
-  "type": "M",
-  "air_temperature_k": 300.0,
-  "process_temperature_k": 310.0,
-  "rotational_speed_rpm": 1500,
-  "torque_nm": 40.0,
-  "tool_wear_min": 120
-}
-```
-
-## 5. API keys and security
-The core predictive-maintenance system does **not** require a paid API key. The `.env.example` includes an optional `OPENAI_API_KEY` placeholder for generating a natural-language explanation. Add your own key only to your local `.env` file. Never commit `.env`, paste keys into source code, or share real keys in ZIP files. The project works without the optional key.
-
-## 6. Important
-This is an educational decision-support prototype, not a certified industrial safety controller. Validate it with plant-specific data and domain experts before using it for real equipment decisions.
+Visit https://superchupu.dev/tinyglobby to read the full documentation.
